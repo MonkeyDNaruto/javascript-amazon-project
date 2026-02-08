@@ -8,10 +8,8 @@ export function addOrder(order) {
 function saveToStorage() {
   localStorage.setItem("orders", JSON.stringify(orders));
 }
-console.log("hello")
 
 // import { products } from "./products";
-
 
 // export const orders = JSON.parse(localStorage.getItem("orders")) || [];
 
