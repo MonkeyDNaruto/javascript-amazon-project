@@ -2,17 +2,16 @@ import { calculateCartQuantity } from "../data/cart.js";
 import { orders } from "../data/orders.js";
 import { getProduct, loadProductsFetch } from "../data/products.js";
 import formatCurrency from "./utils/money.js";
-import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { addToCart } from "../data/cart.js";
 
 async function loadPage() {
-
   await loadProductsFetch();
 
   let ordersHTML = "";
 
   orders.forEach((order) => {
-    const orderTimeString = dayjs(order.orderTime).format('MMMM DD')
+    const orderTimeString = dayjs(order.orderTime).format("MMMM DD");
 
     ordersHTML += `
     <div class="order-container">
@@ -42,10 +41,10 @@ async function loadPage() {
     `;
 
     function productsListHTML(order) {
-      let productsListHTML = '';
+      let productsListHTML = "";
 
       order.products.forEach((productDetails) => {
-        const product = getProduct(productDetails.productId)
+        const product = getProduct(productDetails.productId);
 
         productsListHTML += `
 
@@ -58,12 +57,16 @@ async function loadPage() {
             ${product.name}
           </div>
           <div class="product-delivery-date">
-            Arriving on: ${ dayjs(productDetails.estimatedDeliveryTime).format('MMMM D')}
+            Arriving on: ${dayjs(productDetails.estimatedDeliveryTime).format(
+              "MMMM D"
+            )}
           </div>
           <div class="product-quantity">
             Quantity: ${productDetails.quantity}
           </div>
-          <button class="buy-again-button button-primary js-buy-again" data-product-id="${product.id}">
+          <button class="buy-again-button button-primary js-buy-again" data-product-id="${
+            product.id
+          }">
             <img class="buy-again-icon" src="images/icons/buy-again.png">
             <span class="buy-again-message">Buy it again</span>
           </button>
@@ -76,8 +79,8 @@ async function loadPage() {
             </button>
           </a>
         </div>
-        `
-      })
+        `;
+      });
 
       return productsListHTML;
     }
@@ -87,18 +90,18 @@ async function loadPage() {
 
   document.querySelectorAll('.js-buy-again').forEach((button) => {
     button.addEventListener('click', () => {
-      addToCart(button.dataset.productId)
 
-      button.innerHTML = "Added"
+      addToCart(button.dataset.productId);
 
+      button.innerHTML = 'Added';
       setTimeout(() => {
         button.innerHTML = `
-            <img class="buy-again-icon" src="images/icons/buy-again.png">
-            <span class="buy-again-message">Buy it again</span>
-        `
-      }, 1000)
-    })
-  })
+          <img class="buy-again-icon" src="images/icons/buy-again.png">
+          <span class="buy-again-message">Buy it again</span>
+        `;
+      }, 1000);
+    });
+  });
 
   function updateCartQuantity() {
     document.querySelector(".js-cart-quantity").innerHTML =
@@ -109,32 +112,3 @@ async function loadPage() {
 }
 
 loadPage();
-
-
-// <div class="product-image-container">
-// <img src="images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg">
-// </div>
-
-// <div class="product-details">
-// <div class="product-name">
-//   Adults Plain Cotton T-Shirt - 2 Pack
-// </div>
-// <div class="product-delivery-date">
-//   Arriving on: August 19
-// </div>
-// <div class="product-quantity">
-//   Quantity: 2
-// </div>
-// <button class="buy-again-button button-primary">
-//   <img class="buy-again-icon" src="images/icons/buy-again.png">
-//   <span class="buy-again-message">Buy it again</span>
-// </button>
-// </div>
-
-// <div class="product-actions">
-// <a href="tracking.html?orderId=123&productId=456">
-//   <button class="track-package-button button-secondary">
-//     Track package
-//   </button>
-// </a>
-// </div>
