@@ -93,7 +93,7 @@ export function updateQuantity(productId, newQuantity) {
   saveToStorage();
 }
 
-export function reserCart() {
+export function resetCart() {
   cart = [];
   saveToStorage();
 }
