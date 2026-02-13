@@ -8,6 +8,17 @@ import { addToCart } from "../data/cart.js";
 async function loadPage() {
   await loadProductsFetch();
 
+  if (!orders || orders.length === 0) {
+    document.querySelector(".js-orders").innerHTML = `
+      <div class="empty-orders">
+        <h2>You haven’t placed any orders yet</h2>
+        <p>When you place your first order, it will appear here.</p>
+        <a href="amazon.html" class="button-primary">Start shopping</a>
+      </div>
+    `;
+    return;
+  }
+
   let ordersHTML = "";
 
   orders.forEach((order) => {
@@ -88,12 +99,11 @@ async function loadPage() {
 
   document.querySelector(".js-orders").innerHTML = ordersHTML;
 
-  document.querySelectorAll('.js-buy-again').forEach((button) => {
-    button.addEventListener('click', () => {
-
+  document.querySelectorAll(".js-buy-again").forEach((button) => {
+    button.addEventListener("click", () => {
       addToCart(button.dataset.productId);
 
-      button.innerHTML = 'Added';
+      button.innerHTML = "Added";
       setTimeout(() => {
         button.innerHTML = `
           <img class="buy-again-icon" src="images/icons/buy-again.png">

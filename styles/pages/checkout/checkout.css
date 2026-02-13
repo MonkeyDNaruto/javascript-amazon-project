@@ -234,3 +234,8 @@
 .is-editing-quantity .update-quantity-link {
   display: none;
 }
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

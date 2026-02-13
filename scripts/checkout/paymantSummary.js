@@ -68,10 +68,21 @@ export function renderPaymentSummary() {
 
   document.querySelector(".js-payment-summary").innerHTML = paymentSummaryHTML;
 
+  const placeOrderBtn = document.querySelector(".js-place-order");
+
+  // disable button if cart empty
+  if (cart.length === 0) {
+    placeOrderBtn.disabled = true;
+    placeOrderBtn.classList.add("btn-disabled");
+    placeOrderBtn.textContent = "Cart is empty";
+  }
+
   document
     .querySelector(".js-place-order")
     .addEventListener("click", async () => {
       try {
+        if (cart.length === 0) return;
+
         const response = await fetch("https://supersimplebackend.dev/orders", {
           method: "POST",
           headers: {
@@ -86,6 +97,7 @@ export function renderPaymentSummary() {
         addOrder(order);
       } catch (error) {
         console.log(error);
+        return;
       }
 
       resetCart();
