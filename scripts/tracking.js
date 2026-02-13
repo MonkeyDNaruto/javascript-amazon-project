@@ -1,6 +1,7 @@
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { getOrder } from "../data/orders.js";
 import { getProduct, loadProductsFetch } from "../data/products.js";
+import { calculateCartQuantity } from "../data/cart.js";
 
 async function loadPage() {
   await loadProductsFetch();
@@ -23,9 +24,11 @@ async function loadPage() {
   const today = dayjs();
   const orderTime = dayjs(order.orderTime);
   const deliveryTime = dayjs(productDetails.estimatedDeliveryTime);
-  const percentProgress = ((today - orderTime) / (deliveryTime - orderTime)) * 100;
+  const percentProgress =
+    ((today - orderTime) / (deliveryTime - orderTime)) * 100;
 
-  const deliveredMessage = today < deliveryTime ? 'Arriving on' : 'Delivered on'
+  const deliveredMessage =
+    today < deliveryTime ? "Arriving on" : "Delivered on";
 
   const trackingHTML = `
 
@@ -35,8 +38,8 @@ async function loadPage() {
 
     <div class="delivery-date">
       ${deliveredMessage} ${dayjs(productDetails.estimatedDeliveryTime).format(
-        "dddd, MMMM D"
-      )}
+    "dddd, MMMM D"
+  )}
     </div>
 
     <div class="product-info">
@@ -73,50 +76,9 @@ async function loadPage() {
   `;
 
   document.querySelector(".js-order-tracking").innerHTML = trackingHTML;
+
+  document.querySelector(".js-cart-quantity").innerHTML =
+    calculateCartQuantity();
 }
 
 loadPage();
-
-// const today = dayjs();
-// const orderTime = dayjs(order.orderTime);
-// const deliveryTime = dayjs(productDetails.estimatedDeliveryTime);
-
-// const elapsed = today.diff(orderTime);
-// const total = deliveryTime.diff(orderTime);
-
-// const minTimeline = 24 * 60 * 60 * 1000;
-// const adjustedTotal = Math.max(total, minTimeline);
-
-// let percentProgress;
-// let stage = "Preparing";
-
-// if (today.isAfter(deliveryTime)) {
-//   // Delivery completed
-//   percentProgress = 100;
-//   stage = "Delivered";
-// } else if (elapsed / total < 0.5) {
-//   // First half of shipping
-//   percentProgress = (elapsed / total) * 100; // 0–50%
-//   stage = "Preparing";
-// } else {
-//   // Second half of shipping
-//   percentProgress = 50 + ((elapsed / total - 0.5) * 100); // 50–99%
-//   stage = "Shipped";
-// }
-
-// // if (today.isAfter(deliveryTime)) {
-// //   percentProgress = 100; // Delivered
-// // } else if (elapsed / total < 0.5) {
-// //   percentProgress = 25; // Preparing (first half)
-// // } else {
-// //   percentProgress = 75; // Shipped (middle)
-// // }
-
-// // Clamp progress to 0–100
-// percentProgress = Math.min(100, Math.max(0, percentProgress));
-
-// console.log(percentProgress);
-// console.log(today);
-// console.log(orderTime);
-// console.log(deliveryTime);
-// console.log((today - orderTime) / (deliveryTime - orderTime));
